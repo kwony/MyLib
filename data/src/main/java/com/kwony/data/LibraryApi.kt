@@ -1,6 +1,7 @@
 package com.kwony.data
 
 import androidx.annotation.Keep
+import com.kwony.data.vo.Book
 import retrofit2.http.GET
 
 interface LibraryApi {

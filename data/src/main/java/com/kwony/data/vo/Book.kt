@@ -1,4 +1,4 @@
-package com.kwony.data
+package com.kwony.data.vo
 
 import androidx.annotation.Keep
 
