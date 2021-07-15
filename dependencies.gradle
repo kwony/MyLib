@@ -7,7 +7,7 @@ def versions = [
         dagger             : '2.20',
         navigation         : '2.2.2',
         lifecycle_extension: '2.2.0',
-        retrofit2          : '2.3.0',
+        retrofit2          : '2.6.0',
         glide              : '4.11.0',
         viewpager2         : '1.1.0-alpha01',
         hilt_core: '2.31-alpha',
