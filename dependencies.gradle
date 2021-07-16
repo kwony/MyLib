@@ -11,7 +11,12 @@ def versions = [
         glide              : '4.11.0',
         viewpager2         : '1.1.0-alpha01',
         hilt_core: '2.31-alpha',
-        hilt_viewmodel: '1.0.0-alpha03'
+        hilt_viewmodel: '1.0.0-alpha03',
+        viewmodel_coroutine: '2.2.0',
+        lifecycle_coroutine: '2.2.0',
+        livedata: '2.2.0',
+        room               : '2.3.0',
+        room_persistence   : '1.1.1',
 ]
 
 ext {
@@ -42,6 +47,22 @@ ext {
 
             viewpager2: [
                     viewpager2: "androidx.viewpager2:viewpager2:${versions.viewpager2}"
-            ]
+            ],
+
+            ac: [
+                    viewmodel: "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.viewmodel_coroutine}",
+                    lifecycle: "androidx.lifecycle:lifecycle-runtime-ktx:${versions.lifecycle_coroutine}",
+                    livedata: "androidx.lifecycle:lifecycle-livedata-ktx:${versions.livedata}"
+            ],
+
+            room      : [
+                    room                : "androidx.room:room-runtime:${versions.room}",
+                    compiler            : "androidx.room:room-compiler:${versions.room}",
+                    testing             : "androidx.room:room-testing:${versions.room}",
+                    rxjava2             : "androidx.room:room-rxjava2:${versions.room}",
+                    coroutine           : "androidx.room:room-ktx:${versions.room}",
+                    persistence         : "android.arch.persistence.room:runtime:${versions.room_persistence}",
+                    persistence_compiler: "android.arch.persistence.room:compiler:${versions.room_persistence}"
+            ],
     ]
 }

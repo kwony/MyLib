@@ -55,5 +55,13 @@ dependencies {
     implementation deps.hilt.viewmodel
     kapt deps.hilt.viewmodel_kapt
 
+    implementation deps.glide.glide
+    implementation deps.glide.compiler
+    implementation deps.glide.okhttp3
+
+    implementation deps.ac.viewmodel
+    implementation deps.ac.lifecycle
+    implementation deps.ac.livedata
+
     implementation project(':data')
 }

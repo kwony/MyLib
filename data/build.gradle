@@ -50,4 +50,16 @@ dependencies {
 
     implementation deps.retrofit2.retrofit
     implementation deps.retrofit2.converter_gson
+
+    implementation deps.ac.viewmodel
+    implementation deps.ac.lifecycle
+    implementation deps.ac.livedata
+
+    implementation deps.room.room
+    annotationProcessor deps.room.compiler
+    kapt (deps.room.compiler)
+    testImplementation deps.room.testing
+    implementation deps.room.coroutine
+    implementation deps.room.persistence
+    kapt deps.room.persistence_compiler
 }
