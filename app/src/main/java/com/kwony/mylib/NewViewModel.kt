@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kwony.data.LibraryRepository
+import com.kwony.data.Status
 import com.kwony.data.vo.Book
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,11 +19,17 @@ class NewViewModel @Inject constructor(
 
     val newBooks = MutableLiveData<List<Book>>()
 
+    val errorMessage = MutableLiveData<String>()
+
     fun loadNew() {
         viewModelScope.launch {
             val resource = libraryRepository.loadNew()
 
-            newBooks.value = resource.data?.books
+            if (resource.status == Status.SUCCESS) {
+                newBooks.value = resource.data?.books
+            } else {
+                errorMessage.value = resource.message
+            }
         }
     }
 }
