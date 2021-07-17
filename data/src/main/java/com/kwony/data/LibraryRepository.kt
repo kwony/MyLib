@@ -1,6 +1,7 @@
 package com.kwony.data
 
 import com.kwony.data.dao.BookDetailDao
+import com.kwony.data.dao.BookMemoDao
 import com.kwony.data.dao.BookRelationDao
 import com.kwony.data.dao.BookSearchDao
 import com.kwony.data.vo.*
@@ -14,7 +15,8 @@ class LibraryRepository(
     private val responseHandler: ResponseHandler,
     private val bookDetailDao: BookDetailDao,
     private val bookRelationDao: BookRelationDao,
-    private val bookSearchDao: BookSearchDao
+    private val bookSearchDao: BookSearchDao,
+    private val bookMemoDao: BookMemoDao
 ) {
 
     private val libraryApi by lazy { apiProvider.createApi(LibraryApi::class.java) }
@@ -79,5 +81,17 @@ class LibraryRepository(
 
     suspend fun loadBookRelation(isbn13: Long): Flow<BookRelation?> = withContext(Dispatchers.IO) {
         return@withContext bookRelationDao.selectBookRelationByIsbn(isbn13)
+    }
+
+    suspend fun addBookMemo(isbn13: Long, memo: String) = withContext(Dispatchers.IO) {
+        bookMemoDao.upsert(BookMemo(isbn13, memo))
+    }
+
+    suspend fun deleteBookMemo(isbn13: Long) = withContext(Dispatchers.IO) {
+        bookMemoDao.deleteBookMemo(isbn13)
+    }
+
+    suspend fun loadBookMemo(isbn13: Long) = withContext(Dispatchers.IO) {
+        return@withContext bookMemoDao.selectBookMemoByIsbn(isbn13)
     }
 }

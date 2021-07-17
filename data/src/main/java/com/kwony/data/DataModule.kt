@@ -3,6 +3,7 @@ package com.kwony.data
 import android.content.Context
 import androidx.room.Room
 import com.kwony.data.dao.BookDetailDao
+import com.kwony.data.dao.BookMemoDao
 import com.kwony.data.dao.BookRelationDao
 import com.kwony.data.dao.BookSearchDao
 import dagger.Module
@@ -57,19 +58,27 @@ class DataModule {
 
     @Singleton
     @Provides
+    fun provideBookMemo(appDatabase: AppDatabase) : BookMemoDao {
+        return appDatabase.bookMemoDao()
+    }
+
+    @Singleton
+    @Provides
     fun provideLibraryRepository(
         apiProvider: ApiProvider,
         responseHandler: ResponseHandler,
         bookDetailDao: BookDetailDao,
         bookRelationDao: BookRelationDao,
-        bookSearchDao: BookSearchDao
+        bookSearchDao: BookSearchDao,
+        bookMemoDao: BookMemoDao,
     ): LibraryRepository {
         return LibraryRepository(
             apiProvider,
             responseHandler,
             bookDetailDao,
             bookRelationDao,
-            bookSearchDao
+            bookSearchDao,
+            bookMemoDao
         )
     }
 }

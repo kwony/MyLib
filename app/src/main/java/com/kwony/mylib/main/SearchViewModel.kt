@@ -47,7 +47,7 @@ class SearchViewModel @Inject constructor(
             if (result.status == Status.SUCCESS) {
                 pagingInfo.set(query)
                 searchBooks.value = result.data?.books
-            } else {
+            } else if (result.status == Status.ERROR) {
                 errorMessage.value = result.message
             }
 

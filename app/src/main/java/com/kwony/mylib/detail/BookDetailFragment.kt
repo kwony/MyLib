@@ -62,8 +62,21 @@ class BookDetailFragment : BaseFragment<FragmentBookDetailBinding>() {
             binding.bookmark.setImageDrawable(drawable)
         })
 
+        bookDetailViewModel.bookMemo.observe(viewLifecycleOwner, { memo ->
+            binding.memo.text = String.format("%s: %s", getString(R.string.book_detail_memo), memo)
+        })
+
+
         binding.bookmark.setOnClickListener {
             bookDetailViewModel.shuffleBookMark()
+        }
+
+        binding.saveMemo.setOnClickListener {
+            bookDetailViewModel.saveMemo(binding.editMemo.text.toString())
+        }
+
+        binding.deleteMemo.setOnClickListener {
+            bookDetailViewModel.deleteMemo()
         }
 
         bookDetailViewModel.init(isbn13)

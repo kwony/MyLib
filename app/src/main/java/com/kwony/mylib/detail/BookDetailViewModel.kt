@@ -24,7 +24,11 @@ class BookDetailViewModel @Inject constructor(
 
     val isBookMarked = MutableLiveData<Boolean>()
 
+    val bookMemo = MutableLiveData<String>()
+
     private var loadBookRelationJob: Job? = null
+
+    private var loadBookMemoJob: Job? = null
 
     private var isbn13: Long = 0L
 
@@ -33,7 +37,6 @@ class BookDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             val resource = libraryRepository.loadBookDetail(isbn13)
-
             if (resource.status == Status.SUCCESS) {
                 bookDetail.value = resource.data
             } else {
@@ -49,6 +52,15 @@ class BookDetailViewModel @Inject constructor(
                     isBookMarked.value = relation?.relationType == BookRelationType.BOOK_MARK
                 }
         }
+
+        loadBookMemoJob?.cancel()
+        loadBookMemoJob = viewModelScope.launch {
+            libraryRepository.loadBookMemo(isbn13)
+                .distinctUntilChanged()
+                .collect { memo ->
+                    bookMemo.value = memo?.memo ?: ""
+                }
+        }
     }
 
     fun shuffleBookMark() {
@@ -58,6 +70,18 @@ class BookDetailViewModel @Inject constructor(
             } else {
                 libraryRepository.addBookmark(isbn13)
             }
+        }
+    }
+
+    fun saveMemo(memo: String) {
+        viewModelScope.launch {
+            libraryRepository.addBookMemo(this@BookDetailViewModel.isbn13, memo)
+        }
+    }
+
+    fun deleteMemo() {
+        viewModelScope.launch {
+            libraryRepository.deleteBookMemo(this@BookDetailViewModel.isbn13)
         }
     }
 }

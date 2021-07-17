@@ -21,6 +21,12 @@
 
     <string name="book_detail_desc">Description</string>
 
+    <string name="book_detail_memo">Memo</string>
+
+    <string name="book_detail_save">Save Memo</string>
+
+    <string name="book_detail_delete">Delete Memo</string>
+
     <string name="tab_new">New</string>
 
     <string name="tab_search">Search</string>
