@@ -51,17 +51,13 @@ class BookDetailViewModel @Inject constructor(
         }
     }
 
-    fun cancelBookMark() {
-        if (isBookMarked.value == false) return
+    fun shuffleBookMark() {
         viewModelScope.launch {
-            libraryRepository.removeBookmark(isbn13)
-        }
-    }
-
-    fun addBookMark() {
-        if (isBookMarked.value == true) return
-        viewModelScope.launch {
-            libraryRepository.addBookmark(isbn13)
+            if (isBookMarked.value == true) {
+                libraryRepository.removeBookmark(isbn13)
+            } else {
+                libraryRepository.addBookmark(isbn13)
+            }
         }
     }
 }

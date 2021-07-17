@@ -2,4 +2,22 @@
     <string name="app_name">MyLib</string>
 
     <string name="common_done">Done</string>
+
+    <string name="book_detail_title">Title</string>
+
+    <string name="book_detail_subtitle">Subtitle</string>
+
+    <string name="book_detail_authors">Authors</string>
+
+    <string name="book_detail_publishers">Publishers</string>
+
+    <string name="book_detail_pages">Pages</string>
+
+    <string name="book_detail_rating">Rating</string>
+
+    <string name="book_detail_year">Year</string>
+
+    <string name="book_detail_price">Price</string>
+
+    <string name="book_detail_desc">Description</string>
 </resources>

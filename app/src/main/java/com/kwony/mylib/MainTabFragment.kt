@@ -31,7 +31,7 @@ class MainTabFragment: BaseFragment<FragmentMainTabBinding>() {
         override fun createFragment(position: Int): Fragment {
             return when (items[position]) {
                 TabType.NEW -> NewFragment()
-                TabType.BOOK_MARK -> Fragment()
+                TabType.BOOK_MARK -> BookMarkFragment()
                 TabType.SEARCH -> SearchFragment()
             }
         }

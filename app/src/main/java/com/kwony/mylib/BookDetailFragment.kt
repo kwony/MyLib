@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.kwony.mylib.databinding.FragmentBookDetailBinding
@@ -39,16 +40,29 @@ class BookDetailFragment : BaseFragment<FragmentBookDetailBinding>() {
             requestManager.load(bookDetail.image)
                 .into(binding.cover)
 
-            binding.title.text = bookDetail.title
-            binding.subTitle.text = bookDetail.subtitle
-            binding.authors.text = bookDetail.authors
-            binding.publishers.text = bookDetail.publisher
-            binding.desc.text = bookDetail.desc
+            binding.title.text = String.format("%s: %s", getString(R.string.book_detail_title), bookDetail.title)
+            binding.subTitle.text = String.format("%s: %s", getString(R.string.book_detail_subtitle), bookDetail.subtitle)
+            binding.authors.text = String.format("%s: %s", getString(R.string.book_detail_authors), bookDetail.authors)
+            binding.publishers.text = String.format("%s: %s", getString(R.string.book_detail_publishers), bookDetail.publisher)
+            binding.pages.text = String.format("%s: %s", getString(R.string.book_detail_pages), bookDetail.pages.toString())
+            binding.year.text = String.format("%s: %s", getString(R.string.book_detail_year), bookDetail.year.toString())
+            binding.rating.text = String.format("%s: %s", getString(R.string.book_detail_rating), bookDetail.rating.toString())
+            binding.price.text = String.format("%s: %s", getString(R.string.book_detail_price), bookDetail.price)
+            binding.desc.text = String.format("%s: %s", getString(R.string.book_detail_desc), bookDetail.desc)
         })
 
         bookDetailViewModel.isBookMarked.observe(viewLifecycleOwner, { bookMarked ->
-
+            val drawable = if (bookMarked) {
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_bookmark_added)
+            } else {
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_bookmark_add)
+            }
+            binding.bookmark.setImageDrawable(drawable)
         })
+
+        binding.bookmark.setOnClickListener {
+            bookDetailViewModel.shuffleBookMark()
+        }
 
         bookDetailViewModel.init(isbn13)
     }
