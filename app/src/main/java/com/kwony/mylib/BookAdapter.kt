@@ -24,6 +24,7 @@ class BookAdapter(
         fun bind(book: Book, requestManager: RequestManager, itemClick: (book: Book) -> Unit) {
             binding.bookTitle.text = book.title
             binding.bookSubtitle.text = book.subTitle
+            binding.bookPrice.text = book.price
 
             binding.root.setOnClickListener {
                 itemClick.invoke(book)
