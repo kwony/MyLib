@@ -64,4 +64,12 @@ dependencies {
     implementation deps.ac.livedata
 
     implementation project(':data')
+
+    implementation deps.room.room
+    annotationProcessor deps.room.compiler
+    kapt (deps.room.compiler)
+    testImplementation deps.room.testing
+    implementation deps.room.coroutine
+    implementation deps.room.persistence
+    kapt deps.room.persistence_compiler
 }

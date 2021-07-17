@@ -13,6 +13,6 @@ import com.kwony.data.vo.BookRelation
 )
 abstract class InMemoryDatabase: RoomDatabase() {
     abstract fun bookDao(): BookDao
-//
+
     abstract fun bookRelationDao(): BookRelationDao
 }
