@@ -6,8 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.kwony.data.LibraryRepository
 import com.kwony.data.Status
 import com.kwony.data.vo.Book
+import com.kwony.data.vo.BookSearch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,8 +18,9 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val libraryRepository: LibraryRepository
 ): ViewModel() {
-
     val searchBooks = MutableLiveData<List<Book>>()
+
+    val searchHistory = MutableLiveData<List<BookSearch>>()
 
     val errorMessage = MutableLiveData<String>()
 
@@ -24,8 +28,18 @@ class SearchViewModel @Inject constructor(
 
     private var loadJob: Job? = null
 
+    fun loadHistory() {
+        viewModelScope.launch {
+            libraryRepository.loadBookSearchHistory()
+                .distinctUntilChanged()
+                .collect { list ->
+                    searchHistory.value = list ?: listOf()
+                }
+        }
+    }
+
     fun loadQuery(query: String) {
-        if (loadJob?.isActive == true) return
+        loadJob?.cancel()
 
         loadJob = viewModelScope.launch {
             val result = libraryRepository.loadSearch(query, 0)
@@ -36,9 +50,10 @@ class SearchViewModel @Inject constructor(
             } else {
                 errorMessage.value = result.message
             }
+
+            libraryRepository.addBookSearch(query)
         }
     }
-
 
     fun loadQueryMore() {
         if (loadJob?.isActive == true) return
@@ -57,6 +72,11 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    fun deleteQueryHistory(bookSearch: BookSearch) {
+        viewModelScope.launch {
+            libraryRepository.removeBookSearch(bookSearch.query)
+        }
+    }
 
     private data class PagingInfo(private var _query: String = "", private var _page: Int = 0) {
         val query get() = _query

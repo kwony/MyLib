@@ -26,6 +26,14 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         }
     }
 
+    private val searchAdapter by lazy {
+        SearchHistoryAdapter ({
+            searchViewModel.loadQuery(it.query)
+        }, {
+            searchViewModel.deleteQueryHistory(it)
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -35,9 +43,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             searchViewModel.loadQuery(binding.searchText.text.toString())
         }
 
-        binding.rv.adapter = adapter
-        binding.rv.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        binding.rv.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+        binding.rvSearchResult.adapter = adapter
+        binding.rvSearchResult.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding.rvSearchResult.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
@@ -47,12 +55,26 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             }
         })
 
+        binding.rvSearchHistory.adapter = searchAdapter
+        binding.rvSearchHistory.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+
         searchViewModel.searchBooks.observe(viewLifecycleOwner, {
             adapter.submitItems(it)
+        })
+
+        searchViewModel.searchHistory.observe(viewLifecycleOwner, {
+            binding.rvSearchHistory.visibility = if (it.isEmpty()) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
+            searchAdapter.submitItems(it)
         })
 
         searchViewModel.errorMessage.observe(viewLifecycleOwner, { message ->
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         })
+
+        searchViewModel.loadHistory()
     }
 }

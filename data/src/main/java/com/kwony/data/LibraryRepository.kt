@@ -2,16 +2,20 @@ package com.kwony.data
 
 import com.kwony.data.dao.BookDetailDao
 import com.kwony.data.dao.BookRelationDao
-import com.kwony.data.vo.Book
-import com.kwony.data.vo.BookDetail
-import com.kwony.data.vo.BookRelation
-import com.kwony.data.vo.BookRelationType
+import com.kwony.data.dao.BookSearchDao
+import com.kwony.data.vo.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
-class LibraryRepository(private val apiProvider: ApiProvider, private val responseHandler: ResponseHandler, private val bookDetailDao: BookDetailDao, private val bookRelationDao: BookRelationDao) {
+class LibraryRepository(
+    private val apiProvider: ApiProvider,
+    private val responseHandler: ResponseHandler,
+    private val bookDetailDao: BookDetailDao,
+    private val bookRelationDao: BookRelationDao,
+    private val bookSearchDao: BookSearchDao
+) {
 
     private val libraryApi by lazy { apiProvider.createApi(LibraryApi::class.java) }
 
@@ -53,12 +57,24 @@ class LibraryRepository(private val apiProvider: ApiProvider, private val respon
         }
     }
 
+    suspend fun loadBookSearchHistory(): Flow<List<BookSearch>?> = withContext(Dispatchers.IO) {
+        return@withContext bookSearchDao.selectBookSearchList()
+    }
+
     suspend fun addBookmark(isbn13: Long) = withContext(Dispatchers.IO) {
         bookRelationDao.upsert(BookRelation.create(isbn13, BookRelationType.BOOK_MARK))
     }
 
     suspend fun removeBookmark(isbn13: Long) = withContext(Dispatchers.IO) {
         bookRelationDao.upsert(BookRelation.create(isbn13, BookRelationType.NONE))
+    }
+
+    suspend fun addBookSearch(query: String) = withContext(Dispatchers.IO) {
+        bookSearchDao.upsert(BookSearch(query))
+    }
+
+    suspend fun removeBookSearch(query: String) = withContext(Dispatchers.IO) {
+        bookSearchDao.deleteQuery(query)
     }
 
     suspend fun loadBookRelation(isbn13: Long): Flow<BookRelation?> = withContext(Dispatchers.IO) {
