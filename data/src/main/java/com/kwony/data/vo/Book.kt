@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Keep
 data class Book(
         val title: String,
-        val subTitle: String?,
+        val subtitle: String?,
         val isbn13: Long,
         val price: String,
         val image: String,

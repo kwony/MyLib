@@ -46,6 +46,12 @@ class BookMarkViewModel @Inject constructor(
         }
     }
 
+    fun removeBookMark(isbn13: Long) {
+        viewModelScope.launch {
+            libraryRepository.removeBookmark(isbn13)
+        }
+    }
+
     private suspend fun sortBookList(list: List<BookDetail>, sortType: SortType): List<BookDetail> = withContext(Dispatchers.IO) {
         return@withContext when (sortType) {
             SortType.ADDED -> originalOrder

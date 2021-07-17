@@ -23,7 +23,7 @@ class BookAdapter(
     class BookViewHolder(private val binding: ViewholderBookBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(book: Book, requestManager: RequestManager, itemClick: (book: Book) -> Unit) {
             binding.bookTitle.text = book.title
-            binding.bookSubtitle.text = book.subTitle
+            binding.bookSubtitle.text = book.subtitle
             binding.bookPrice.text = book.price
 
             binding.root.setOnClickListener {
