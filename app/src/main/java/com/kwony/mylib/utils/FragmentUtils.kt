@@ -1,4 +1,4 @@
-package com.kwony.mylib
+package com.kwony.mylib.utils
 
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment

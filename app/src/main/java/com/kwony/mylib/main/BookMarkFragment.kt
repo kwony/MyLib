@@ -1,4 +1,4 @@
-package com.kwony.mylib
+package com.kwony.mylib.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.kwony.mylib.base.BaseFragment
 import com.kwony.mylib.databinding.FragmentBookMarkBinding
+import com.kwony.mylib.detail.BookDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

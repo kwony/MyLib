@@ -1,10 +1,9 @@
-package com.kwony.mylib
+package com.kwony.mylib.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kwony.data.LibraryRepository
-import com.kwony.data.vo.Book
 import com.kwony.data.vo.BookDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

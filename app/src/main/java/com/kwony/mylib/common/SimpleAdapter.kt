@@ -1,4 +1,4 @@
-package com.kwony.mylib
+package com.kwony.mylib.common
 
 import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList

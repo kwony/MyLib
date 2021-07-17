@@ -1,9 +1,11 @@
-package com.kwony.mylib
+package com.kwony.mylib.detail
 
+import android.R
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.kwony.mylib.utils.FragmentUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,7 +30,7 @@ class BookDetailActivity : AppCompatActivity() {
 
         FragmentUtils.replaceFragmentIfNotExists(
             supportFragmentManager,
-            android.R.id.content,
+            R.id.content,
             "bookdetailfragment",
             BookDetailFragment.newInstance(isbn13),
             true

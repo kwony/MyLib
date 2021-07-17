@@ -1,7 +1,9 @@
-package com.kwony.mylib
+package com.kwony.mylib.main
 
+import android.R
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.kwony.mylib.utils.FragmentUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -11,7 +13,7 @@ class MainActivity : AppCompatActivity() {
 
         FragmentUtils.replaceFragmentIfNotExists(
             supportFragmentManager,
-            android.R.id.content,
+            R.id.content,
             "maintabfragment",
             MainTabFragment(),
             true

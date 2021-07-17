@@ -1,4 +1,4 @@
-package com.kwony.mylib
+package com.kwony.mylib.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

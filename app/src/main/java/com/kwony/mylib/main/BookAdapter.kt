@@ -1,10 +1,11 @@
-package com.kwony.mylib
+package com.kwony.mylib.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.kwony.data.vo.Book
+import com.kwony.mylib.common.SimpleAdapter
 import com.kwony.mylib.databinding.ViewholderBookBinding
 
 class BookAdapter(

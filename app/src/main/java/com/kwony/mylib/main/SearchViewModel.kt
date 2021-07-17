@@ -1,4 +1,4 @@
-package com.kwony.mylib
+package com.kwony.mylib.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

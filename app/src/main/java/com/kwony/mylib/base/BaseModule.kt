@@ -1,4 +1,4 @@
-package com.kwony.mylib
+package com.kwony.mylib.base
 
 import android.content.Context
 import com.bumptech.glide.Glide

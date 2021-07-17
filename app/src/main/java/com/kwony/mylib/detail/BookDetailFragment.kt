@@ -1,4 +1,4 @@
-package com.kwony.mylib
+package com.kwony.mylib.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.kwony.mylib.base.BaseFragment
+import com.kwony.mylib.R
 import com.kwony.mylib.databinding.FragmentBookDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 

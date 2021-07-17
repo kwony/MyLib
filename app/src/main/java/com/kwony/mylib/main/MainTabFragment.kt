@@ -1,4 +1,4 @@
-package com.kwony.mylib
+package com.kwony.mylib.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.kwony.mylib.base.BaseFragment
 import com.kwony.mylib.databinding.FragmentMainTabBinding
 import dagger.hilt.android.AndroidEntryPoint
 
