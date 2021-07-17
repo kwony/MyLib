@@ -20,4 +20,10 @@
     <string name="book_detail_price">Price</string>
 
     <string name="book_detail_desc">Description</string>
+
+    <string name="tab_new">New</string>
+
+    <string name="tab_search">Search</string>
+
+    <string name="tab_bookmark">Book Mark</string>
 </resources>
