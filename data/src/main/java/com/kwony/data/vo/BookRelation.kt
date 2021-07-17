@@ -3,9 +3,9 @@ package com.kwony.data.vo
 import androidx.room.Entity
 import androidx.room.Ignore
 
-@Entity(primaryKeys = ["isbn"])
+@Entity(primaryKeys = ["isbn13"])
 data class BookRelation(
-    val isbn: Long,
+    val isbn13: Long,
     val _relationType: String
 ) {
     @Ignore
@@ -13,7 +13,7 @@ data class BookRelation(
 
     companion object {
         @JvmStatic
-        fun create(isbn: Long, relationType: BookRelationType) = BookRelation(isbn, relationType.code)
+        fun create(isbn13: Long, relationType: BookRelationType) = BookRelation(isbn13, relationType.code)
     }
 }
 

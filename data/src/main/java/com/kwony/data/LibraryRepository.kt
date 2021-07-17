@@ -3,6 +3,8 @@ package com.kwony.data
 import com.kwony.data.dao.BookDao
 import com.kwony.data.dao.BookRelationDao
 import com.kwony.data.vo.Book
+import com.kwony.data.vo.BookDetail
+import com.kwony.data.vo.BookRelation
 import com.kwony.data.vo.BookRelationType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -38,6 +40,29 @@ class LibraryRepository(private val apiProvider: ApiProvider, private val respon
     }
 
     suspend fun loadBookMark(): Flow<List<Book>?> = withContext(Dispatchers.IO) {
-        return@withContext bookRelationDao.selectBookByRelation(BookRelationType.BOOK_MARK.code)
+        return@withContext bookRelationDao.selectBooksByRelation(BookRelationType.BOOK_MARK.code)
+    }
+
+    suspend fun loadBookDetail(isbn13: Long): Resource<BookDetail> = withContext(Dispatchers.IO) {
+        return@withContext try {
+            libraryApi.getBookDetail(isbn13).run {
+                responseHandler.handleSuccess(this)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            responseHandler.handleException(e)
+        }
+    }
+
+    suspend fun addBookmark(isbn13: Long) = withContext(Dispatchers.IO) {
+        bookRelationDao.upsert(BookRelation.create(isbn13, BookRelationType.BOOK_MARK))
+    }
+
+    suspend fun removeBookmark(isbn13: Long) = withContext(Dispatchers.IO) {
+        bookRelationDao.upsert(BookRelation.create(isbn13, BookRelationType.NONE))
+    }
+
+    suspend fun loadBookRelation(isbn13: Long): Flow<BookRelation?> = withContext(Dispatchers.IO) {
+        return@withContext bookRelationDao.selectBookRelationByIsbn(isbn13)
     }
 }

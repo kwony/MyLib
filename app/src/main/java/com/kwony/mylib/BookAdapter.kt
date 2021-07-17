@@ -8,7 +8,8 @@ import com.kwony.data.vo.Book
 import com.kwony.mylib.databinding.ViewholderBookBinding
 
 class BookAdapter(
-        private val requestManager: RequestManager
+        private val requestManager: RequestManager,
+        private val bookClickListener: (book: Book) -> Unit
 ) : SimpleAdapter<Book, BookAdapter.BookViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val binding = ViewholderBookBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -16,13 +17,17 @@ class BookAdapter(
     }
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
-        holder.bind(items[position], requestManager)
+        holder.bind(items[position], requestManager, bookClickListener)
     }
 
     class BookViewHolder(private val binding: ViewholderBookBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(book: Book, requestManager: RequestManager) {
+        fun bind(book: Book, requestManager: RequestManager, itemClick: (book: Book) -> Unit) {
             binding.bookTitle.text = book.title
             binding.bookSubtitle.text = book.subTitle
+
+            binding.root.setOnClickListener {
+                itemClick.invoke(book)
+            }
 
             requestManager.load(book.image)
                     .into(binding.bookCover)

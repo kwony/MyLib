@@ -20,7 +20,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
     private val searchViewModel by lazy { ViewModelProvider(this).get(SearchViewModel::class.java) }
 
-    private val adapter by lazy { BookAdapter(requestManager) }
+    private val adapter by lazy {
+        BookAdapter(requestManager) {
+            BookDetailActivity.startActivity(requireContext(), it.isbn13)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

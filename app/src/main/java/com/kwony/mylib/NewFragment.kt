@@ -29,7 +29,9 @@ class NewFragment : BaseFragment<FragmentNewBinding>() {
     }
 
     private val adapter by lazy {
-        BookAdapter(requestManager)
+        BookAdapter(requestManager) {
+            BookDetailActivity.startActivity(requireContext(), it.isbn13)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -13,6 +13,10 @@ interface BookRelationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(bookRelation: BookRelation)
 
-    @Query("select * from Book inner join BookRelation on Book.isbn13 = BookRelation.isbn where BookRelation._relationType = :relationType")
-    fun selectBookByRelation(relationType: String): Flow<List<Book>?>
+    @Query("select * from Book inner join BookRelation on Book.isbn13 = BookRelation.isbn13 where BookRelation._relationType = :relationType")
+    fun selectBooksByRelation(relationType: String): Flow<List<Book>?>
+
+
+    @Query("select * from BookRelation where BookRelation.isbn13 = :isbn13")
+    fun selectBookRelationByIsbn(isbn13: Long): Flow<BookRelation?>
 }
