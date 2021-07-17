@@ -26,4 +26,10 @@
     <string name="tab_search">Search</string>
 
     <string name="tab_bookmark">Book Mark</string>
+
+    <string name="bookmark_sort_added">Added Sort</string>
+
+    <string name="bookmark_sort_price">Price Sort</string>
+
+    <string name="bookmark_sort_publish">Publish Order</string>
 </resources>

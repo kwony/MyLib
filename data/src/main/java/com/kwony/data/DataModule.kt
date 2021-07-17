@@ -2,12 +2,11 @@ package com.kwony.data
 
 import android.content.Context
 import androidx.room.Room
-import com.kwony.data.dao.BookDao
+import com.kwony.data.dao.BookDetailDao
 import com.kwony.data.dao.BookRelationDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -32,8 +31,8 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideBookDao(inMemoryDatabase: InMemoryDatabase): BookDao {
-        return inMemoryDatabase.bookDao()
+    fun provideBookDao(inMemoryDatabase: InMemoryDatabase): BookDetailDao {
+        return inMemoryDatabase.bookDetailDao()
     }
 
     @Singleton
@@ -44,7 +43,7 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideLibraryRepository(apiProvider: ApiProvider, responseHandler: ResponseHandler, bookDao: BookDao, bookRelationDao: BookRelationDao): LibraryRepository {
-        return LibraryRepository(apiProvider, responseHandler, bookDao, bookRelationDao)
+    fun provideLibraryRepository(apiProvider: ApiProvider, responseHandler: ResponseHandler, bookDetailDao: BookDetailDao, bookRelationDao: BookRelationDao): LibraryRepository {
+        return LibraryRepository(apiProvider, responseHandler, bookDetailDao, bookRelationDao)
     }
 }

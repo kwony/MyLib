@@ -4,12 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.kwony.data.vo.Book
+import com.kwony.data.vo.BookDetail
 import com.kwony.mylib.databinding.FragmentBookMarkBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class BookMarkFragment : BaseFragment<FragmentBookMarkBinding>() {
@@ -28,13 +35,69 @@ class BookMarkFragment : BaseFragment<FragmentBookMarkBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initView()
+        observe()
+    }
+
+    private fun initView() {
         binding.rv.adapter = adapter
         binding.rv.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        bookMarkViewModel.bookmarkBooks.observe(viewLifecycleOwner, {
-            adapter.submitItems(it)
+        binding.addedSort.setOnClickListener {
+            bookMarkViewModel.setSortOrder(BookMarkViewModel.SortType.ADDED)
+        }
+
+        binding.publishSort.setOnClickListener {
+            bookMarkViewModel.setSortOrder(BookMarkViewModel.SortType.PUBLISH)
+        }
+
+        binding.priceSort.setOnClickListener {
+            bookMarkViewModel.setSortOrder(BookMarkViewModel.SortType.PRICE)
+        }
+    }
+
+    private fun observe() {
+        bookMarkViewModel.bookmarkBooks.observe(viewLifecycleOwner, { list ->
+            lifecycleScope.launch {
+                val parsedList = withContext(Dispatchers.IO) {
+                    return@withContext list.map { parseBookDetail(it) }
+                }
+                withContext(Dispatchers.Main) {
+                    adapter.submitItems(parsedList)
+                }
+            }
+        })
+
+        bookMarkViewModel.sortType.observe(viewLifecycleOwner, { sortType ->
+            when (sortType) {
+                BookMarkViewModel.SortType.PUBLISH -> {
+                    setSortView(binding.publishSort, listOf(binding.addedSort, binding.priceSort))
+                }
+                BookMarkViewModel.SortType.ADDED -> {
+                    setSortView(binding.addedSort, listOf(binding.publishSort, binding.priceSort))
+                }
+                BookMarkViewModel.SortType.PRICE -> {
+                    setSortView(binding.priceSort, listOf(binding.publishSort, binding.addedSort))
+                }
+                else -> {}
+            }
         })
 
         bookMarkViewModel.loadBookmark()
     }
+
+    private fun setSortView(selectedView: TextView, unselecteds: List<TextView>) {
+        selectedView.setTextColor(0xff000000.toInt())
+
+        unselecteds.forEach { it.setTextColor(0xffd8d8d8.toInt()) }
+    }
+
+    private fun parseBookDetail(bookDetail: BookDetail) = Book(
+        bookDetail.title,
+        bookDetail.subtitle,
+        bookDetail.isbn13,
+        bookDetail.price,
+        bookDetail.image,
+        bookDetail.url
+    )
 }

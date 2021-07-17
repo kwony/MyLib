@@ -1,11 +1,11 @@
 package com.kwony.mylib
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kwony.data.LibraryRepository
 import com.kwony.data.vo.Book
+import com.kwony.data.vo.BookDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -18,9 +18,11 @@ import javax.inject.Inject
 class BookMarkViewModel @Inject constructor(
         private val libraryRepository: LibraryRepository
 ) : ViewModel() {
-    val bookmarkBooks = MutableLiveData<List<Book>>()
+    val bookmarkBooks = MutableLiveData<List<BookDetail>>()
 
-    val errorMessage = MutableLiveData<String>()
+    val sortType = MutableLiveData(SortType.ADDED)
+
+    private var originalOrder: List<BookDetail> = listOf()
 
     fun loadBookmark() {
         viewModelScope.launch {
@@ -28,9 +30,31 @@ class BookMarkViewModel @Inject constructor(
                 .distinctUntilChanged()
                 .collect { list ->
                     list?.let {
-                        bookmarkBooks.value = it
+                        originalOrder = it
+                        bookmarkBooks.value = sortBookList(it, sortType.value!!)
                     }
                 }
         }
+    }
+
+    fun setSortOrder(sortType: SortType) {
+        viewModelScope.launch {
+            bookmarkBooks.value?.let {
+                bookmarkBooks.value = sortBookList(it, sortType)
+            }
+            this@BookMarkViewModel.sortType.value = sortType
+        }
+    }
+
+    private suspend fun sortBookList(list: List<BookDetail>, sortType: SortType): List<BookDetail> = withContext(Dispatchers.IO) {
+        return@withContext when (sortType) {
+            SortType.ADDED -> originalOrder
+            SortType.PRICE -> list.sortedBy { it.price.substring(1, it.price.length).toFloat() }
+            SortType.PUBLISH -> list.sortedBy { it.year }
+        }
+    }
+
+    enum class SortType {
+        ADDED, PUBLISH, PRICE
     }
 }

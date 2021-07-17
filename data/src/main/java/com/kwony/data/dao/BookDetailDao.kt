@@ -3,12 +3,10 @@ package com.kwony.data.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
-import com.kwony.data.vo.Book
+import com.kwony.data.vo.BookDetail
 
 @Dao
-interface BookDao {
+interface BookDetailDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(book: List<Book>): List<Long>
-
-
+    suspend fun upsert(book: List<BookDetail>): List<Long>
 }

@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Keep
-@Entity(primaryKeys = ["isbn13"])
 data class Book(
         val title: String,
         val subTitle: String?,
