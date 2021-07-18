@@ -45,8 +45,8 @@ class BookMarkFragment : BaseFragment<FragmentBookMarkBinding>() {
             bookMarkViewModel.setSortOrder(BookMarkViewModel.SortType.ADDED)
         }
 
-        binding.publishSort.setOnClickListener {
-            bookMarkViewModel.setSortOrder(BookMarkViewModel.SortType.PUBLISH)
+        binding.ratingSort.setOnClickListener {
+            bookMarkViewModel.setSortOrder(BookMarkViewModel.SortType.RATING)
         }
 
         binding.priceSort.setOnClickListener {
@@ -61,14 +61,14 @@ class BookMarkFragment : BaseFragment<FragmentBookMarkBinding>() {
 
         bookMarkViewModel.sortType.observe(viewLifecycleOwner, { sortType ->
             when (sortType) {
-                BookMarkViewModel.SortType.PUBLISH -> {
-                    setSortView(binding.publishSort, listOf(binding.addedSort, binding.priceSort))
+                BookMarkViewModel.SortType.RATING -> {
+                    setSortView(binding.ratingSort, listOf(binding.addedSort, binding.priceSort))
                 }
                 BookMarkViewModel.SortType.ADDED -> {
-                    setSortView(binding.addedSort, listOf(binding.publishSort, binding.priceSort))
+                    setSortView(binding.addedSort, listOf(binding.ratingSort, binding.priceSort))
                 }
                 BookMarkViewModel.SortType.PRICE -> {
-                    setSortView(binding.priceSort, listOf(binding.publishSort, binding.addedSort))
+                    setSortView(binding.priceSort, listOf(binding.ratingSort, binding.addedSort))
                 }
                 else -> {}
             }

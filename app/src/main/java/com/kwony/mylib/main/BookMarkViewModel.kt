@@ -62,11 +62,12 @@ class BookMarkViewModel @Inject constructor(
         return@withContext when (sortType) {
             SortType.ADDED -> originalOrder
             SortType.PRICE -> list.sortedBy { it.price.substring(1, it.price.length).toFloat() }
+            SortType.RATING -> list.sortedByDescending { it.rating }
             SortType.PUBLISH -> list.sortedBy { it.year }
         }
     }
 
     enum class SortType {
-        ADDED, PUBLISH, PRICE
+        ADDED, PUBLISH, PRICE, RATING
     }
 }

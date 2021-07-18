@@ -38,4 +38,6 @@
     <string name="bookmark_sort_price">Price Sort</string>
 
     <string name="bookmark_sort_publish">Publish Order</string>
+
+    <string name="bookmark_sort_rating">Rating Order</string>
 </resources>

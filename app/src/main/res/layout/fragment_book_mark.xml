@@ -29,8 +29,8 @@
             android:layout_height="match_parent" />
 
         <TextView
-            android:id="@+id/publish_sort"
-            android:text="@string/bookmark_sort_publish"
+            android:id="@+id/rating_sort"
+            android:text="@string/bookmark_sort_rating"
             android:layout_weight="1"
             android:layout_gravity="center"
             android:gravity="center"
