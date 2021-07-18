@@ -46,8 +46,8 @@ class NewFragment : BaseFragment<FragmentNewBinding>() {
             adapter.submitItems(it)
         })
 
-        newViewModel.errorMessage.observe(viewLifecycleOwner, { message ->
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        newViewModel.errorMessage.observe(viewLifecycleOwner, { throwable ->
+            Toast.makeText(requireContext(), throwable.message, Toast.LENGTH_SHORT).show()
         })
 
         loadNew()

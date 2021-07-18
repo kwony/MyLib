@@ -27,7 +27,6 @@ class LibraryRepository(
                 responseHandler.handleSuccess(this)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
             responseHandler.handleException(e)
         }
     }
@@ -38,7 +37,6 @@ class LibraryRepository(
                 responseHandler.handleSuccess(this)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
             responseHandler.handleException(e)
         }
     }
@@ -54,7 +52,6 @@ class LibraryRepository(
                 responseHandler.handleSuccess(this)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
             responseHandler.handleException(e)
         }
     }

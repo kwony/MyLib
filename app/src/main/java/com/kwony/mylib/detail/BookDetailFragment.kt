@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -38,9 +39,28 @@ class BookDetailFragment : BaseFragment<FragmentBookDetailBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initView()
+        observe()
+    }
+
+    private fun initView() {
+        binding.bookmark.setOnClickListener {
+            bookDetailViewModel.shuffleBookMark()
+        }
+
+        binding.saveMemo.setOnClickListener {
+            bookDetailViewModel.saveMemo(binding.editMemo.text.toString())
+        }
+
+        binding.deleteMemo.setOnClickListener {
+            bookDetailViewModel.deleteMemo()
+        }
+    }
+
+    private fun observe() {
         bookDetailViewModel.bookDetail.observe(viewLifecycleOwner, { bookDetail ->
             requestManager.load(bookDetail.image)
-                .into(binding.cover)
+                    .into(binding.cover)
 
             binding.title.text = String.format("%s: %s", getString(R.string.book_detail_title), bookDetail.title)
             binding.subTitle.text = String.format("%s: %s", getString(R.string.book_detail_subtitle), bookDetail.subtitle)
@@ -66,18 +86,9 @@ class BookDetailFragment : BaseFragment<FragmentBookDetailBinding>() {
             binding.memo.text = String.format("%s: %s", getString(R.string.book_detail_memo), memo)
         })
 
-
-        binding.bookmark.setOnClickListener {
-            bookDetailViewModel.shuffleBookMark()
-        }
-
-        binding.saveMemo.setOnClickListener {
-            bookDetailViewModel.saveMemo(binding.editMemo.text.toString())
-        }
-
-        binding.deleteMemo.setOnClickListener {
-            bookDetailViewModel.deleteMemo()
-        }
+        bookDetailViewModel.errorMessage.observe(viewLifecycleOwner, { throwable ->
+            Toast.makeText(requireContext(), throwable.message, Toast.LENGTH_SHORT).show()
+        })
 
         bookDetailViewModel.init(isbn13)
     }

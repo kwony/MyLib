@@ -74,8 +74,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             searchAdapter.submitItems(it)
         })
 
-        searchViewModel.errorMessage.observe(viewLifecycleOwner, { message ->
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        searchViewModel.errorMessage.observe(viewLifecycleOwner, { throwable ->
+            Toast.makeText(requireContext(), throwable.message, Toast.LENGTH_SHORT).show()
         })
 
         searchViewModel.loadHistory()

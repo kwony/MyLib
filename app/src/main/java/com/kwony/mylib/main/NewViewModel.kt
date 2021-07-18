@@ -19,7 +19,7 @@ class NewViewModel @Inject constructor(
 
     val newBooks = MutableLiveData<List<Book>>()
 
-    val errorMessage = MutableLiveData<String>()
+    val errorMessage = MutableLiveData<Throwable>()
 
     fun loadNew() {
         viewModelScope.launch {
@@ -28,7 +28,7 @@ class NewViewModel @Inject constructor(
             if (resource.status == Status.SUCCESS) {
                 newBooks.value = resource.data?.books
             } else {
-                errorMessage.value = resource.message
+                errorMessage.value = resource.throwable
             }
         }
     }

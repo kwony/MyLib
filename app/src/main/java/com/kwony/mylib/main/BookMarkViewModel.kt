@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.kwony.data.LibraryRepository
 import com.kwony.data.vo.BookDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -22,6 +23,7 @@ class BookMarkViewModel @Inject constructor(
     val sortType = MutableLiveData(SortType.ADDED)
 
     private var originalOrder: List<BookDetail> = listOf()
+
 
     fun loadBookmark() {
         viewModelScope.launch {

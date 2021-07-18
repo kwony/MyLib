@@ -22,7 +22,7 @@ class SearchViewModel @Inject constructor(
 
     val searchHistory = MutableLiveData<List<BookSearch>>()
 
-    val errorMessage = MutableLiveData<String>()
+    val errorMessage = MutableLiveData<Throwable>()
 
     private val pagingInfo: PagingInfo = PagingInfo()
 
@@ -48,7 +48,7 @@ class SearchViewModel @Inject constructor(
                 pagingInfo.set(query)
                 searchBooks.value = result.data?.books
             } else if (result.status == Status.ERROR) {
-                errorMessage.value = result.message
+                errorMessage.value = result.throwable
             }
 
             libraryRepository.addBookSearch(query)
@@ -67,7 +67,7 @@ class SearchViewModel @Inject constructor(
                     result.data?.books?.let { addAll(it) }
                 }.toList()
             } else {
-                errorMessage.value = result.message
+                errorMessage.value = result.throwable
             }
         }
     }

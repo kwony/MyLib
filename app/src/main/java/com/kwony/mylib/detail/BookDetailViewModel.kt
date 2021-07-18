@@ -20,7 +20,7 @@ class BookDetailViewModel @Inject constructor(
 ): ViewModel() {
     val bookDetail = MutableLiveData<BookDetail>()
 
-    val errorMessage = MutableLiveData<String>()
+    val errorMessage = MutableLiveData<Throwable>()
 
     val isBookMarked = MutableLiveData<Boolean>()
 
@@ -40,7 +40,7 @@ class BookDetailViewModel @Inject constructor(
             if (resource.status == Status.SUCCESS) {
                 bookDetail.value = resource.data
             } else {
-                errorMessage.value = resource.message
+                errorMessage.value = resource.throwable
             }
         }
 

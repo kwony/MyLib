@@ -1,10 +1,12 @@
 package com.kwony.mylib.main
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.kwony.data.vo.BookDetail
+import com.kwony.mylib.R
 import com.kwony.mylib.common.SimpleAdapter
 import com.kwony.mylib.databinding.ViewholderBookDetailBinding
 
@@ -26,6 +28,11 @@ class BookMarkAdapter(
         fun bind(book: BookDetail, requestManager: RequestManager, itemClick: (book: BookDetail) -> Unit, deleteClick: (book: BookDetail) -> Unit) {
             binding.bookTitle.text = book.title
             binding.bookSubtitle.text = book.subtitle
+            if (book.subtitle?.isBlank() == true) {
+                binding.bookSubtitle.visibility = View.GONE
+            } else {
+                binding.bookSubtitle.visibility = View.VISIBLE
+            }
             binding.bookPrice.text = book.price
             binding.bookRating.text = book.rating.toString()
             binding.bookPages.text = book.pages.toString()
