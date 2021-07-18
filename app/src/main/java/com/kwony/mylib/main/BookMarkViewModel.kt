@@ -1,5 +1,6 @@
 package com.kwony.mylib.main
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.IllegalStateException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,9 +26,12 @@ class BookMarkViewModel @Inject constructor(
 
     private var originalOrder: List<BookDetail> = listOf()
 
+    private val handler = CoroutineExceptionHandler { _, throwable ->
+        Log.d("BookMarkViewModel", throwable.toString())
+    }
 
     fun loadBookmark() {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             libraryRepository.loadBookMark()
                 .distinctUntilChanged()
                 .collect { list ->
@@ -39,7 +44,7 @@ class BookMarkViewModel @Inject constructor(
     }
 
     fun setSortOrder(sortType: SortType) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             bookmarkBooks.value?.let {
                 bookmarkBooks.value = sortBookList(it, sortType)
             }
@@ -48,7 +53,7 @@ class BookMarkViewModel @Inject constructor(
     }
 
     fun removeBookMark(isbn13: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(handler) {
             libraryRepository.removeBookmark(isbn13)
         }
     }

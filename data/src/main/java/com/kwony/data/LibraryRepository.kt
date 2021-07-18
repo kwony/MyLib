@@ -9,10 +9,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import java.lang.Exception
+import java.lang.IllegalArgumentException
 
 class LibraryRepository(
     private val apiProvider: ApiProvider,
-    private val responseHandler: ResponseHandler,
     private val bookDetailDao: BookDetailDao,
     private val bookRelationDao: BookRelationDao,
     private val bookSearchDao: BookSearchDao,
@@ -21,38 +21,21 @@ class LibraryRepository(
 
     private val libraryApi by lazy { apiProvider.createApi(LibraryApi::class.java) }
 
-    suspend fun loadNew(): Resource<BookListResp> = withContext(Dispatchers.IO) {
-        return@withContext try {
-            libraryApi.getNew().run {
-                responseHandler.handleSuccess(this)
-            }
-        } catch (e: Exception) {
-            responseHandler.handleException(e)
-        }
+    suspend fun loadNew(): BookListResp = withContext(Dispatchers.IO) {
+        return@withContext libraryApi.getNew()
     }
 
-    suspend fun loadSearch(query: String, page: Int): Resource<BookListResp> = withContext(Dispatchers.IO) {
-        return@withContext try {
-            libraryApi.getSearchResult(query, page).run {
-                responseHandler.handleSuccess(this)
-            }
-        } catch (e: Exception) {
-            responseHandler.handleException(e)
-        }
+    suspend fun loadSearch(query: String, page: Int): BookListResp = withContext(Dispatchers.IO) {
+        return@withContext libraryApi.getSearchResult(query, page)
     }
 
     suspend fun loadBookMark(): Flow<List<BookDetail>?> = withContext(Dispatchers.IO) {
         return@withContext bookRelationDao.selectBooksByRelation(BookRelationType.BOOK_MARK.code)
     }
 
-    suspend fun loadBookDetail(isbn13: Long): Resource<BookDetail> = withContext(Dispatchers.IO) {
-        return@withContext try {
-            libraryApi.getBookDetail(isbn13).run {
-                bookDetailDao.upsert(listOf(this))
-                responseHandler.handleSuccess(this)
-            }
-        } catch (e: Exception) {
-            responseHandler.handleException(e)
+    suspend fun loadBookDetail(isbn13: Long): BookDetail = withContext(Dispatchers.IO) {
+        return@withContext libraryApi.getBookDetail(isbn13).also {
+            bookDetailDao.upsert(listOf(it))
         }
     }
 

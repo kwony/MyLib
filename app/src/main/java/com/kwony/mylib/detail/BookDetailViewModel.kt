@@ -4,10 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kwony.data.LibraryRepository
-import com.kwony.data.Status
 import com.kwony.data.vo.BookDetail
 import com.kwony.data.vo.BookRelationType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -32,20 +32,21 @@ class BookDetailViewModel @Inject constructor(
 
     private var isbn13: Long = 0L
 
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        errorMessage.value = throwable
+    }
+
     fun init(isbn13: Long) {
         this.isbn13 = isbn13
 
-        viewModelScope.launch {
-            val resource = libraryRepository.loadBookDetail(isbn13)
-            if (resource.status == Status.SUCCESS) {
-                bookDetail.value = resource.data
-            } else {
-                errorMessage.value = resource.throwable
-            }
+        viewModelScope.launch(exceptionHandler) {
+            val resp = libraryRepository.loadBookDetail(isbn13)
+
+            bookDetail.value = resp
         }
 
         loadBookRelationJob?.cancel()
-        loadBookRelationJob = viewModelScope.launch {
+        loadBookRelationJob = viewModelScope.launch(exceptionHandler) {
             libraryRepository.loadBookRelation(isbn13)
                 .distinctUntilChanged()
                 .collect { relation ->
@@ -54,7 +55,7 @@ class BookDetailViewModel @Inject constructor(
         }
 
         loadBookMemoJob?.cancel()
-        loadBookMemoJob = viewModelScope.launch {
+        loadBookMemoJob = viewModelScope.launch(exceptionHandler) {
             libraryRepository.loadBookMemo(isbn13)
                 .distinctUntilChanged()
                 .collect { memo ->
@@ -64,7 +65,7 @@ class BookDetailViewModel @Inject constructor(
     }
 
     fun shuffleBookMark() {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             if (isBookMarked.value == true) {
                 libraryRepository.removeBookmark(isbn13)
             } else {
@@ -74,13 +75,13 @@ class BookDetailViewModel @Inject constructor(
     }
 
     fun saveMemo(memo: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             libraryRepository.addBookMemo(this@BookDetailViewModel.isbn13, memo)
         }
     }
 
     fun deleteMemo() {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             libraryRepository.deleteBookMemo(this@BookDetailViewModel.isbn13)
         }
     }

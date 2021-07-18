@@ -4,12 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kwony.data.LibraryRepository
-import com.kwony.data.Status
 import com.kwony.data.vo.Book
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,14 +20,18 @@ class NewViewModel @Inject constructor(
 
     val errorMessage = MutableLiveData<Throwable>()
 
-    fun loadNew() {
-        viewModelScope.launch {
-            val resource = libraryRepository.loadNew()
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        errorMessage.value = throwable
+    }
 
-            if (resource.status == Status.SUCCESS) {
-                newBooks.value = resource.data?.books
+    fun loadNew() {
+        viewModelScope.launch(exceptionHandler) {
+            val resp = libraryRepository.loadNew()
+
+            if (resp.error == 0) {
+                newBooks.value = resp.books
             } else {
-                errorMessage.value = resource.throwable
+                throw Exception("Unknown Exception")
             }
         }
     }

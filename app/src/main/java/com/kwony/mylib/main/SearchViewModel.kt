@@ -4,10 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kwony.data.LibraryRepository
-import com.kwony.data.Status
 import com.kwony.data.vo.Book
 import com.kwony.data.vo.BookSearch
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -28,6 +28,10 @@ class SearchViewModel @Inject constructor(
 
     private var loadJob: Job? = null
 
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        errorMessage.value = throwable
+    }
+
     fun loadHistory() {
         viewModelScope.launch {
             libraryRepository.loadBookSearchHistory()
@@ -41,39 +45,38 @@ class SearchViewModel @Inject constructor(
     fun loadQuery(query: String) {
         loadJob?.cancel()
 
-        loadJob = viewModelScope.launch {
-            val result = libraryRepository.loadSearch(query, 0)
+        loadJob = viewModelScope.launch(exceptionHandler) {
+            val response = libraryRepository.loadSearch(query, 0)
 
-            if (result.status == Status.SUCCESS) {
+            if (response.error == 0) {
                 pagingInfo.set(query)
-                searchBooks.value = result.data?.books
-            } else if (result.status == Status.ERROR) {
-                errorMessage.value = result.throwable
+                searchBooks.value = response.books
+                libraryRepository.addBookSearch(query)
+            } else {
+                throw Exception("Unknown Exception")
             }
-
-            libraryRepository.addBookSearch(query)
         }
     }
 
     fun loadQueryMore() {
         if (loadJob?.isActive == true) return
 
-        loadJob = viewModelScope.launch {
+        loadJob = viewModelScope.launch(exceptionHandler) {
             val result = libraryRepository.loadSearch(pagingInfo.query, pagingInfo.nextPage())
 
-            if (result.status == Status.SUCCESS) {
+            if (result.error == 0) {
                 searchBooks.value = ArrayList<Book>().apply {
                     searchBooks.value?.let { addAll(it) }
-                    result.data?.books?.let { addAll(it) }
+                    addAll(result.books)
                 }.toList()
             } else {
-                errorMessage.value = result.throwable
+                throw Exception("Unknown Exception")
             }
         }
     }
 
     fun deleteQueryHistory(bookSearch: BookSearch) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             libraryRepository.removeBookSearch(bookSearch.query)
         }
     }

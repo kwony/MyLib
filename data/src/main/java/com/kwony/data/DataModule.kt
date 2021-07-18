@@ -21,10 +21,6 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideResponseHandler() = ResponseHandler()
-
-    @Singleton
-    @Provides
     fun provideInMemoryDatabase(context: Context): InMemoryDatabase {
         return Room.inMemoryDatabaseBuilder(context, InMemoryDatabase::class.java)
             .fallbackToDestructiveMigration()
@@ -66,7 +62,6 @@ class DataModule {
     @Provides
     fun provideLibraryRepository(
         apiProvider: ApiProvider,
-        responseHandler: ResponseHandler,
         bookDetailDao: BookDetailDao,
         bookRelationDao: BookRelationDao,
         bookSearchDao: BookSearchDao,
@@ -74,7 +69,6 @@ class DataModule {
     ): LibraryRepository {
         return LibraryRepository(
             apiProvider,
-            responseHandler,
             bookDetailDao,
             bookRelationDao,
             bookSearchDao,
