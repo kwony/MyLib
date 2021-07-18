@@ -1,6 +1,7 @@
 package com.kwony.mylib.main
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
@@ -24,8 +25,15 @@ class BookAdapter(
     class BookViewHolder(private val binding: ViewholderBookBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(book: Book, requestManager: RequestManager, itemClick: (book: Book) -> Unit) {
             binding.bookTitle.text = book.title
+            binding.bookSubtitle.visibility = if (book.subtitle?.isBlank() == true) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
             binding.bookSubtitle.text = book.subtitle
             binding.bookPrice.text = book.price
+            binding.bookIsbn.text = book.isbn13.toString()
+            binding.bookUrl.text = book.url
 
             binding.root.setOnClickListener {
                 itemClick.invoke(book)

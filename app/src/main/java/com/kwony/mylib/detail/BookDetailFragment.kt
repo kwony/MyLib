@@ -71,6 +71,9 @@ class BookDetailFragment : BaseFragment<FragmentBookDetailBinding>() {
             binding.rating.text = String.format("%s: %s", getString(R.string.book_detail_rating), bookDetail.rating.toString())
             binding.price.text = String.format("%s: %s", getString(R.string.book_detail_price), bookDetail.price)
             binding.desc.text = String.format("%s: %s", getString(R.string.book_detail_desc), bookDetail.desc)
+            binding.isbn.text = String.format("%s: %s", getString(R.string.book_detail_isbn), bookDetail.isbn13)
+            binding.url.text = String.format("%s: %s", getString(R.string.book_detail_url), bookDetail.url)
+            binding.freeEbook.text = String.format("%s: %s", getString(R.string.book_detail_free_ebook), bookDetail.pdf?.freeEbook)
         })
 
         bookDetailViewModel.isBookMarked.observe(viewLifecycleOwner, { bookMarked ->

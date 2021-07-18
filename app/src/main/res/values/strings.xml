@@ -21,6 +21,12 @@
 
     <string name="book_detail_desc">Description</string>
 
+    <string name="book_detail_isbn">Isbn</string>
+
+    <string name="book_detail_url">URL</string>
+
+    <string name="book_detail_free_ebook">free ebook</string>
+
     <string name="book_detail_memo">Memo</string>
 
     <string name="book_detail_save">Save Memo</string>
